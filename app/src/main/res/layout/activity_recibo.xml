@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="Carrito de Compras"
+        android:text="Recibo de Compra"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_width="wrap_content"
@@ -15,40 +15,19 @@
         android:layout_marginBottom="16dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewCarrito"
+        android:id="@+id/recyclerViewRecibo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:padding="4dp"/>
 
     <TextView
-        android:id="@+id/txtTotal"
+        android:id="@+id/txtTotalRecibo"
         android:text="Total: $0"
         android:textSize="20sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="16dp">
-
-        <Button
-            android:id="@+id/btnVaciar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Vaciar Carrito"
-            android:layout_marginEnd="8dp"/>
-
-        <Button
-            android:id="@+id/btnComprar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Comprar"
-            android:layout_marginStart="8dp"/>
-    </LinearLayout>
+        android:layout_gravity="end"
+        android:layout_marginTop="16dp"/>
 
 </LinearLayout>

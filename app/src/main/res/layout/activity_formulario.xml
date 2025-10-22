@@ -76,5 +76,13 @@
             android:visibility="gone"
             android:background="@color/gray_light"/>
 
+        <!-- Botón Enviar -->
+        <Button
+            android:id="@+id/btn_enviar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enviar Formulario"
+            android:layout_marginTop="24dp"/>
+
     </LinearLayout>
 </ScrollView>

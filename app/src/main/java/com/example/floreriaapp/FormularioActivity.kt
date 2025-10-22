@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +31,7 @@ class FormularioActivity : AppCompatActivity() {
     private lateinit var actvRazon: AutoCompleteTextView    // Campo para seleccionar la razón
     private lateinit var etDescripcion: TextInputEditText   // Campo para la descripción
     private lateinit var btnAdjuntarFoto: Button            // Botón para adjuntar foto
+    private lateinit var btnEnviar: Button                  // Botón para enviar el formulario
     private lateinit var ivFoto: ImageView                  // ImageView para mostrar la foto seleccionada
     private var currentPhotoPath: String? = null           // Ruta de la foto tomada con cámara
     private var photoURI: Uri? = null                       // URI de la foto para mostrar en ImageView
@@ -83,15 +85,21 @@ class FormularioActivity : AppCompatActivity() {
         actvRazon = findViewById(R.id.actv_razon)
         etDescripcion = findViewById(R.id.et_descripcion)
         btnAdjuntarFoto = findViewById(R.id.btn_adjuntar_foto)
+        btnEnviar = findViewById(R.id.btn_enviar)
         ivFoto = findViewById(R.id.iv_foto)
 
         // Lista de razones para el AutoCompleteTextView
-        val razones = arrayOf("Ramo Personalizado", "Reclamo", "Sugerencia", "Otros")
+        val razones = arrayOf("Ramo Personalizado", "Reclamo", "Sugerencia", "Otro")
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, razones)
         actvRazon.setAdapter(adapter)
 
         // Configura click para adjuntar foto
         btnAdjuntarFoto.setOnClickListener { selectImage() }
+
+        // Configura click para enviar formulario
+        btnEnviar.setOnClickListener {
+            Toast.makeText(this, "Formulario enviado con éxito", Toast.LENGTH_LONG).show()
+        }
     }
 
     // Función que muestra opciones para adjuntar foto
@@ -144,5 +152,3 @@ class FormularioActivity : AppCompatActivity() {
         ).apply { currentPhotoPath = absolutePath } // Guarda ruta actual
     }
 }
-
-
