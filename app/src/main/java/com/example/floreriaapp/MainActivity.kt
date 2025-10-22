@@ -22,10 +22,10 @@ class MainActivity : AppCompatActivity() {
 
     // Lista de flores disponibles
     private val floresLista = listOf(
-        Flor("Rosa", 15000, R.drawable.rosa),
-        Flor("Tulipán", 20000, R.drawable.tulipan),
-        Flor("Orquídea", 25000, R.drawable.orquidea),
-        Flor("Girasol", 15000, R.drawable.girasol)
+        Flor("Rosa", "Clásica y elegante, perfecta para cualquier ocasión.", 15000, R.drawable.rosa),
+        Flor("Tulipán", "Colores vibrantes que alegran cualquier espacio.", 20000, R.drawable.tulipan),
+        Flor("Orquídea", "Exótica y sofisticada, un regalo inolvidable.", 25000, R.drawable.orquidea),
+        Flor("Girasol", "Irradia alegría y energía positiva.", 15000, R.drawable.girasol)
     )
 
     // Launcher para recibir resultados de CarritoActivity
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         btnCarrito = findViewById(R.id.btnCarrito)
         btnFormulario = findViewById(R.id.btnFormulario) // Botón nuevo para abrir formulario
 
-        // Configurar adaptador del RecyclerView
+        // Configurar adaptador del RecyclerView con el nuevo evento de click
         val adapter = FlorAdapter(floresLista) { flor ->
             carrito.add("${flor.nombre} - $${flor.precio}") // Agrega flor al carrito
             Toast.makeText(this, "${flor.nombre} agregado al carrito", Toast.LENGTH_SHORT).show()
@@ -82,6 +82,3 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent) // Lanza actividad sin esperar resultado
     }
 }
-
-
-

@@ -5,9 +5,7 @@ package com.example.floreriaapp
 // funciones útiles como toString(), equals(), hashCode() y copy().
 data class Flor(
     val nombre: String,      // Nombre de la flor (por ejemplo: "Rosa Roja")
+    val descripcion: String, // Descripción de la flor
     val precio: Int,         // Precio de la flor en pesos (por ejemplo: 1500)
     val imagenResId: Int     // ID del recurso de la imagen de la flor (por ejemplo R.drawable.rosa)
 )
-
-
-
