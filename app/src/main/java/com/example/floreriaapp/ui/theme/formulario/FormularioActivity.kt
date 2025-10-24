@@ -1,7 +1,6 @@
-package com.example.floreriaapp
+package com.example.floreriaapp.ui.theme.formulario
 
-// Importaciones necesarias para Android, manejo de imágenes y permisos
-import android.app.Activity
+import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -17,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import com.example.floreriaapp.R
 import com.google.android.material.textfield.TextInputEditText
 import java.io.File
 import java.io.IOException
@@ -40,7 +40,7 @@ class FormularioActivity : AppCompatActivity() {
     private val takePictureLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
+        if (result.resultCode == RESULT_OK) {
             photoURI?.let {
                 ivFoto.setImageURI(it)   // Muestra la foto en ImageView
                 ivFoto.visibility = View.VISIBLE
@@ -52,7 +52,7 @@ class FormularioActivity : AppCompatActivity() {
     private val pickImageLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
+        if (result.resultCode == RESULT_OK) {
             result.data?.data?.let { uri ->
                 photoURI = uri
                 ivFoto.setImageURI(uri)   // Muestra la foto seleccionada
@@ -110,9 +110,10 @@ class FormularioActivity : AppCompatActivity() {
         builder.setItems(options) { dialog, item ->
             when {
                 options[item] == "Tomar Foto" ->
-                    requestCameraPermissionLauncher.launch(android.Manifest.permission.CAMERA) // Solicita permiso cámara
+                    requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA) // Solicita permiso cámara
                 options[item] == "Elegir de la Galería" -> {
-                    val pickPhoto = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    val pickPhoto =
+                        Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                     pickImageLauncher.launch(pickPhoto) // Lanza galería
                 }
                 options[item] == "Cancelar" -> dialog.dismiss() // Cierra diálogo

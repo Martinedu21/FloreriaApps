@@ -1,4 +1,4 @@
-package com.example.floreriaapp
+package com.example.floreriaapp.model
 
 // Data class para representar una flor
 // Los data class en Kotlin se usan para guardar datos de manera simple y automática proporciona

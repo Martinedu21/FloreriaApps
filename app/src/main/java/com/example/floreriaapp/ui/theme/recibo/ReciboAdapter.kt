@@ -1,4 +1,4 @@
-package com.example.floreriaapp
+package com.example.floreriaapp.ui.theme.recibo
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.floreriaapp.R
+import com.example.floreriaapp.model.Flor
 
 class ReciboAdapter(private val flores: List<Flor>) : RecyclerView.Adapter<ReciboAdapter.ReciboViewHolder>() {
 

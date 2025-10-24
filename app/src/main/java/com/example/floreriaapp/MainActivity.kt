@@ -1,6 +1,5 @@
 package com.example.floreriaapp
 
-// Importaciones necesarias para Android y RecyclerView
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -9,16 +8,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.floreriaapp.database.DatabaseHelper
+import com.example.floreriaapp.model.Flor
+import com.example.floreriaapp.ui.theme.carrito.CarritoActivity
+import com.example.floreriaapp.ui.theme.flor.FlorAdapter
+import com.example.floreriaapp.ui.theme.formulario.FormularioActivity
 
-// Actividad principal de la app
 class MainActivity : AppCompatActivity() {
 
-    // Vistas de la interfaz
     private lateinit var recyclerViewFlores: RecyclerView
     private lateinit var btnCarrito: Button
     private lateinit var btnFormulario: Button
 
-    // Lista de flores disponibles
     private val floresLista = listOf(
         Flor("Rosa", "Clásica y elegante, perfecta para cualquier ocasión.", 15000, R.drawable.rosa),
         Flor("Tulipán", "Colores vibrantes que alegran cualquier espacio.", 20000, R.drawable.tulipan),
@@ -34,35 +35,45 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        // Inicializar vistas
         recyclerViewFlores = findViewById(R.id.recyclerViewFlores)
         btnCarrito = findViewById(R.id.btnCarrito)
         btnFormulario = findViewById(R.id.btnFormulario)
 
+        // Instanciar base de datos
+        val db = DatabaseHelper(this)
+
+        // Guardar flores en la base de datos solo si no existen
+        val cursor = db.obtenerFlores()
+        if (!cursor.moveToFirst()) {
+            floresLista.forEach { flor ->
+                db.agregarFlor(flor.nombre, flor.descripcion, flor.precio.toDouble(), flor.imagenResId)
+            }
+        }
+        cursor.close()
+
         // Configurar adaptador del RecyclerView
         val adapter = FlorAdapter(floresLista) { flor ->
-            CartRepository.carrito.add(flor)
+            db.agregarAlCarrito(flor.nombre, flor.precio.toDouble(), flor.imagenResId)
             Toast.makeText(this, "${flor.nombre} agregado al carrito", Toast.LENGTH_SHORT).show()
         }
 
-        // Configurar layout y adaptador del RecyclerView
         recyclerViewFlores.layoutManager = LinearLayoutManager(this)
         recyclerViewFlores.adapter = adapter
 
-        // Configurar acciones de los botones
+        // Botones
         btnCarrito.setOnClickListener { verCarrito() }
         btnFormulario.setOnClickListener { abrirFormulario() }
     }
 
-    // Función para abrir CarritoActivity
     private fun verCarrito() {
+        // Abrir CarritoActivity
         val intent = Intent(this, CarritoActivity::class.java)
         startActivity(intent)
     }
 
-    // Función para abrir FormularioActivity
     private fun abrirFormulario() {
         val intent = Intent(this, FormularioActivity::class.java)
         startActivity(intent)
     }
 }
+

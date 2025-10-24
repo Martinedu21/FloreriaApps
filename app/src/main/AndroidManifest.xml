@@ -34,13 +34,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CarritoActivity"
+            android:name=".ui.theme.carrito.CarritoActivity"
             android:exported="false" />
         <activity
-            android:name=".FormularioActivity"
+            android:name=".ui.theme.formulario.FormularioActivity"
             android:exported="false" />
         <activity
-            android:name=".ReciboActivity"
+            android:name=".ui.theme.recibo.ReciboActivity"
             android:exported="false" />
 
 

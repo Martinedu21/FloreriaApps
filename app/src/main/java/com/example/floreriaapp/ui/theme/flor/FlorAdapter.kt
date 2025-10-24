@@ -1,6 +1,5 @@
-package com.example.floreriaapp
+package com.example.floreriaapp.ui.theme.flor
 
-// Importaciones necesarias para trabajar con Views y RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +7,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.floreriaapp.R
+import com.example.floreriaapp.model.Flor
 
 // Adapter para mostrar una lista de flores en un RecyclerView
 // Recibe una lista de flores y una función que se ejecuta al hacer click en un item

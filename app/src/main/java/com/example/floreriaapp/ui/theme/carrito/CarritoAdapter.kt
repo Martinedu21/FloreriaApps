@@ -1,4 +1,4 @@
-package com.example.floreriaapp
+package com.example.floreriaapp.ui.theme.carrito
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,8 +6,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.floreriaapp.R
+import com.example.floreriaapp.model.FlorEnCarrito
 
-class CarritoAdapter(private val carrito: List<Flor>) : RecyclerView.Adapter<CarritoAdapter.CarritoViewHolder>() {
+class CarritoAdapter(initialCarrito: List<FlorEnCarrito>) : RecyclerView.Adapter<CarritoAdapter.CarritoViewHolder>() {
+
+    private val carrito: MutableList<FlorEnCarrito> = initialCarrito.toMutableList()
 
     inner class CarritoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgFlor: ImageView = itemView.findViewById(R.id.imgFlorCarrito)
@@ -28,4 +32,14 @@ class CarritoAdapter(private val carrito: List<Flor>) : RecyclerView.Adapter<Car
     }
 
     override fun getItemCount() = carrito.size
+
+    fun setFlores(flores: List<FlorEnCarrito>) {
+        this.carrito.clear()
+        this.carrito.addAll(flores)
+        notifyDataSetChanged()
+    }
+
+    fun getTotal(): Int {
+        return carrito.sumOf { it.precio }
+    }
 }

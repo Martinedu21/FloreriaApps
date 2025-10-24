@@ -1,4 +1,6 @@
-package com.example.floreriaapp
+package com.example.floreriaapp.repository
+
+import com.example.floreriaapp.model.Flor
 
 // Objeto Singleton para gestionar el estado del carrito y las compras.
 object CartRepository {
