@@ -1,11 +1,19 @@
 package com.example.floreriaapp.model
 
-// Data class para representar una flor
-// Los data class en Kotlin se usan para guardar datos de manera simple y automática proporciona
-// funciones útiles como toString(), equals(), hashCode() y copy().
 data class Flor(
-    val nombre: String,      // Nombre de la flor (por ejemplo: "Rosa Roja")
-    val descripcion: String, // Descripción de la flor
-    val precio: Int,         // Precio de la flor en pesos (por ejemplo: 1500)
-    val imagenResId: Int     // ID del recurso de la imagen de la flor (por ejemplo R.drawable.rosa)
+
+    // Propiedad que guarda el nombre de la flor.
+    //
+    val nombre: String,
+
+    // Propiedad que describe la flor
+    val descripcion: String,
+
+    // Propiedad que guarda el precio de la flor en pesos.
+
+    val precio: Int,
+
+    // Propiedad que almacena el ID del recurso de imagen asociado a la flor.
+
+    val imagenResId: Int
 )

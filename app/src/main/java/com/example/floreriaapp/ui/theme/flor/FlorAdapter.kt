@@ -1,4 +1,5 @@
 package com.example.floreriaapp.ui.theme.flor
+// Paquete que agrupa las clases relacionadas con la pantalla de listado de flores.
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,41 +11,64 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.floreriaapp.R
 import com.example.floreriaapp.model.Flor
 
-// Adapter para mostrar una lista de flores en un RecyclerView
-// Recibe una lista de flores y una función que se ejecuta al hacer click en un item
+// ---------------------------------------------------------------------------
+// Adapter para mostrar una lista de flores en un RecyclerView.
+// Este adaptador recibe:
+//   - Una lista de objetos Flor.
+//   - Una función (callback) que se ejecuta cuando se presiona el botón "Agregar al carrito".
+// ---------------------------------------------------------------------------
 class FlorAdapter(
-    private val flores: List<Flor>,              // Lista de flores a mostrar
-    private val onAgregarClick: (Flor) -> Unit     // Callback que se ejecuta al tocar una flor
+    private val flores: List<Flor>,             // Lista de flores a mostrar
+    private val onAgregarClick: (Flor) -> Unit  // Callback que se ejecuta al tocar el botón "Agregar"
 ) : RecyclerView.Adapter<FlorAdapter.FlorViewHolder>() {
 
-    // ViewHolder: clase interna que contiene las referencias a los elementos del item
+    // -----------------------------------------------------------------------
+    // ViewHolder: clase interna que guarda las referencias a los componentes
+    // de la vista (imagen, nombre, descripción, precio, botón...).
+    // Permite acceder a ellos sin tener que buscarlos repetidamente,
+    // mejorando el rendimiento del RecyclerView.
+    // -----------------------------------------------------------------------
     inner class FlorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imgFlor: ImageView = itemView.findViewById(R.id.imgFlor)          // Imagen de la flor
-        val txtNombreFlor: TextView = itemView.findViewById(R.id.txtNombreFlor) // Nombre de la flor
+        val imgFlor: ImageView = itemView.findViewById(R.id.imgFlor)                   // Imagen de la flor
+        val txtNombreFlor: TextView = itemView.findViewById(R.id.txtNombreFlor)        // Nombre de la flor
         val txtDescripcionFlor: TextView = itemView.findViewById(R.id.txtDescripcionFlor) // Descripción de la flor
-        val txtPrecioFlor: TextView = itemView.findViewById(R.id.txtPrecioFlor) // Precio de la flor
-        val btnAgregarCarrito: Button = itemView.findViewById(R.id.btnAgregarCarrito) // Botón para agregar al carrito
+        val txtPrecioFlor: TextView = itemView.findViewById(R.id.txtPrecioFlor)        // Precio de la flor
+        val btnAgregarCarrito: Button = itemView.findViewById(R.id.btnAgregarCarrito)  // Botón "Agregar al carrito"
     }
 
-    // Crea la vista de cada item y devuelve un ViewHolder
+    // -----------------------------------------------------------------------
+    // Crea la vista de cada ítem de la lista.
+    // -----------------------------------------------------------------------
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlorViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_flor, parent, false) // Infla el layout del item
-        return FlorViewHolder(view) // Retorna un ViewHolder con la vista inflada
+            .inflate(R.layout.item_flor, parent, false) // "Inflar" = convertir el XML en una vista real
+        return FlorViewHolder(view)
     }
 
-    // Asocia los datos de la flor con los elementos del item
+    // -----------------------------------------------------------------------
+    // Vincula (asocia) los datos de una flor con los elementos visuales del ítem.
+    // Aquí se rellenan los TextView y ImageView con la información de la flor.
+    // -----------------------------------------------------------------------
     override fun onBindViewHolder(holder: FlorViewHolder, position: Int) {
-        val flor = flores[position]                     // Obtenemos la flor de la posición actual
-        holder.imgFlor.setImageResource(flor.imagenResId) // Asigna la imagen
-        holder.txtNombreFlor.text = flor.nombre          // Asigna el nombre
-        holder.txtDescripcionFlor.text = flor.descripcion // Asigna la descripción
-        holder.txtPrecioFlor.text = "$${flor.precio}"   // Asigna el precio con formato $
+        val flor = flores[position] // Obtiene la flor correspondiente a esta posición
 
-        // Configura el click en el botón: ejecuta la función pasada al adapter
-        holder.btnAgregarCarrito.setOnClickListener { onAgregarClick(flor) }
+        // Asigna los datos a los elementos del layout
+        holder.imgFlor.setImageResource(flor.imagenResId)
+        holder.txtNombreFlor.text = flor.nombre
+        holder.txtDescripcionFlor.text = flor.descripcion
+        holder.txtPrecioFlor.text = "$${flor.precio}"
+
+        // Configura el botón "Agregar al carrito"
+        // Cuando el usuario lo toca, se ejecuta la función que recibió el adapter.
+        // Esto permite manejar la acción desde la Activity o Fragment que use el adaptador.
+        holder.btnAgregarCarrito.setOnClickListener {
+            onAgregarClick(flor)
+        }
     }
 
-    // Devuelve la cantidad de items que tiene la lista
+    // -----------------------------------------------------------------------
+    // Devuelve el número total de elementos en la lista.
+    // El RecyclerView usa este valor para saber cuántos ítems mostrar.
+    // -----------------------------------------------------------------------
     override fun getItemCount() = flores.size
 }
