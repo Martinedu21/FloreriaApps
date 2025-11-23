@@ -14,10 +14,14 @@ class CarritoRepository(private val dbHelper: DatabaseHelper) {
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
                 val nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
                 val precio = cursor.getDouble(cursor.getColumnIndexOrThrow("precio"))
-                val imagen = cursor.getInt(cursor.getColumnIndexOrThrow("imagen"))
+                
+                // CORRECCIÓN: Leemos la imagen como String (nombre del recurso)
+                val imagenNombre = cursor.getString(cursor.getColumnIndexOrThrow("imagen")) 
+                
                 val cantidad = cursor.getInt(cursor.getColumnIndexOrThrow("cantidad"))
 
-                lista.add(FlorEnCarrito(id, nombre, precio.toInt(), imagen, cantidad))
+                // Pasamos imagenNombre al constructor
+                lista.add(FlorEnCarrito(id, nombre, precio.toInt(), imagenNombre, cantidad))
             } while (cursor.moveToNext())
         }
         cursor.close()

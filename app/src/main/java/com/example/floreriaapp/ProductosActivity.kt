@@ -10,20 +10,19 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.floreriaapp.database.DatabaseHelper
-import com.example.floreriaapp.model.Flor
+import com.example.floreriaapp.database.RetrofitClient
+import com.example.floreriaapp.Flor
 import com.example.floreriaapp.ui.theme.carrito.CarritoActivity
 import com.example.floreriaapp.ui.theme.flor.FlorAdapter
 import com.example.floreriaapp.ui.theme.formulario.FormularioActivity
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ProductosActivity : AppCompatActivity() {
 
     private lateinit var recyclerViewFlores: RecyclerView
-    private val floresLista = listOf(
-        Flor("Rosa", "Clásica y elegante, perfecta para cualquier ocasión.", 15000, R.drawable.rosa),
-        Flor("Tulipán", "Colores vibrantes que alegran cualquier espacio.", 20000, R.drawable.tulipan),
-        Flor("Orquídea", "Exótica y sofisticada, un regalo inolvidable.", 25000, R.drawable.orquidea),
-        Flor("Girasol", "Irradia alegría y energía positiva.", 15000, R.drawable.girasol)
-    )
+    private lateinit var db: DatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,26 +31,43 @@ class ProductosActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = "Nuestros Productos"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true) // Botón para volver atrás
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         recyclerViewFlores = findViewById(R.id.recyclerViewFlores)
-        val db = DatabaseHelper(this)
+        recyclerViewFlores.layoutManager = LinearLayoutManager(this)
+        
+        db = DatabaseHelper(this)
 
-        // Lógica de inicialización de DB si está vacía
-        val cursor = db.obtenerFlores()
-        if (!cursor.moveToFirst()) {
-            floresLista.forEach { flor ->
-                db.agregarFlor(flor.nombre, flor.descripcion, flor.precio.toDouble(), flor.imagenResId)
+        // Cargar datos desde la API
+        cargarDatosDesdeApi()
+    }
+
+    private fun cargarDatosDesdeApi() {
+        val apiService = RetrofitClient.instance
+        val call = apiService.obtenerFlores()
+
+        call.enqueue(object : Callback<List<Flor>> {
+            override fun onResponse(call: Call<List<Flor>>, response: Response<List<Flor>>) {
+                if (response.isSuccessful) {
+                    val listaFlores = response.body() ?: emptyList()
+                    setupAdapter(listaFlores)
+                    Toast.makeText(this@ProductosActivity, "Productos cargados", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@ProductosActivity, "Error al obtener datos", Toast.LENGTH_SHORT).show()
+                }
             }
-        }
-        cursor.close()
 
-        val adapter = FlorAdapter(floresLista) { flor ->
-            db.agregarAlCarrito(flor.nombre, flor.precio.toDouble(), flor.imagenResId)
+            override fun onFailure(call: Call<List<Flor>>, t: Throwable) {
+                Toast.makeText(this@ProductosActivity, "Error de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun setupAdapter(flores: List<Flor>) {
+        val adapter = FlorAdapter(flores) { flor ->
+            db.agregarAlCarrito(flor.nombre, flor.precio.toDouble(), flor.imagenNombre)
             Toast.makeText(this, "${flor.nombre} agregado al carrito", Toast.LENGTH_SHORT).show()
         }
-
-        recyclerViewFlores.layoutManager = LinearLayoutManager(this)
         recyclerViewFlores.adapter = adapter
     }
 
@@ -63,14 +79,13 @@ class ProductosActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                // Al pulsar la flecha de atrás o el título, volvemos al Inicio
                 val intent = Intent(this, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 startActivity(intent)
                 finish()
                 true
             }
-            R.id.menu_productos -> true // Ya estamos aquí
+            R.id.menu_productos -> true
             R.id.menu_formulario -> {
                 startActivity(Intent(this, FormularioActivity::class.java))
                 true

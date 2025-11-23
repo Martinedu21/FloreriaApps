@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.floreriaapp.R
-import com.example.floreriaapp.model.Flor
+import com.example.floreriaapp.Flor
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -33,7 +33,16 @@ class FlorAdapter(
 
     override fun onBindViewHolder(holder: FlorViewHolder, position: Int) {
         val flor = flores[position]
-        holder.imgFlor.setImageResource(flor.imagenResId)
+        
+        // Usar el nuevo método para obtener el ID del recurso basado en el nombre
+        val imageResId = flor.getImagenResId(holder.itemView.context)
+        if (imageResId != 0) {
+            holder.imgFlor.setImageResource(imageResId)
+        } else {
+            // Imagen por defecto si no se encuentra el recurso
+            holder.imgFlor.setImageResource(R.drawable.ic_launcher_foreground) 
+        }
+
         holder.txtNombreFlor.text = flor.nombre
         holder.txtDescripcionFlor.text = flor.descripcion
         

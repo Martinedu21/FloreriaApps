@@ -31,7 +31,15 @@ class CarritoAdapter(initialCarrito: List<FlorEnCarrito>) :
 
     override fun onBindViewHolder(holder: CarritoViewHolder, position: Int) {
         val flor = carrito[position]
-        holder.imgFlor.setImageResource(flor.imagenResId)
+        
+        // Usar el nuevo método para obtener la imagen por nombre
+        val imageResId = flor.getImagenResId(holder.itemView.context)
+        if (imageResId != 0) {
+            holder.imgFlor.setImageResource(imageResId)
+        } else {
+             holder.imgFlor.setImageResource(R.drawable.ic_launcher_foreground)
+        }
+        
         holder.txtNombre.text = flor.nombre
         
         val formatoChile = NumberFormat.getCurrencyInstance(Locale("es", "CL"))
