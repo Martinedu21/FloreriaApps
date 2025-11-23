@@ -15,14 +15,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Título"
+            android:textColorHint="@color/black"
+            app:hintTextColor="@color/floripondia_pink"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/purple_500"
+            app:boxStrokeColor="@color/floripondia_pink"
             android:layout_marginBottom="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:inputType="text"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -32,12 +35,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Razón"
+            android:textColorHint="@color/black"
+            app:hintTextColor="@color/floripondia_pink"
+            app:boxStrokeColor="@color/floripondia_pink"
             android:layout_marginBottom="16dp">
 
             <AutoCompleteTextView
                 android:id="@+id/actv_razon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:inputType="none"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -46,14 +53,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Descripción"
+            android:textColorHint="@color/black"
+            app:hintTextColor="@color/floripondia_pink"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/purple_500"
+            app:boxStrokeColor="@color/floripondia_pink"
             android:layout_marginBottom="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_descripcion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:inputType="textMultiLine"
                 android:minLines="3"/>
         </com.google.android.material.textfield.TextInputLayout>

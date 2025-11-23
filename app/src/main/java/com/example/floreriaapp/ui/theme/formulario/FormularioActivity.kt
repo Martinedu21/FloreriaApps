@@ -6,6 +6,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -16,7 +18,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import com.example.floreriaapp.MainActivity
+import com.example.floreriaapp.ProductosActivity
 import com.example.floreriaapp.R
+import com.example.floreriaapp.ui.theme.carrito.CarritoActivity
 import com.google.android.material.textfield.TextInputEditText
 import java.io.File
 import java.io.IOException
@@ -80,6 +85,10 @@ class FormularioActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_formulario) // Asocia el layout XML
 
+        // Habilitar botón de atrás en la Toolbar
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Formulario"
+
         // Inicializar vistas
         etTitulo = findViewById(R.id.et_titulo)
         actvRazon = findViewById(R.id.actv_razon)
@@ -98,8 +107,84 @@ class FormularioActivity : AppCompatActivity() {
 
         // Configura click para enviar formulario
         btnEnviar.setOnClickListener {
-            Toast.makeText(this, "Formulario enviado con éxito", Toast.LENGTH_LONG).show()
+            if (validarFormulario()) {
+                // Aquí iría la lógica real de envío (a servidor, BD, etc.)
+                Toast.makeText(this, "Formulario enviado con éxito", Toast.LENGTH_LONG).show()
+                limpiarFormulario() // Opcional: limpiar después de enviar
+            }
         }
+    }
+
+    // Menú superior
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                // Al pulsar la flecha de atrás o el título, volvemos al Inicio
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                startActivity(intent)
+                finish()
+                true
+            }
+            R.id.menu_productos -> {
+                startActivity(Intent(this, ProductosActivity::class.java))
+                true
+            }
+            R.id.menu_formulario -> true // Ya estamos aquí
+            R.id.menu_carrito -> {
+                startActivity(Intent(this, CarritoActivity::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    // Función de validación
+    private fun validarFormulario(): Boolean {
+        var esValido = true
+
+        val titulo = etTitulo.text.toString().trim()
+        val razon = actvRazon.text.toString().trim()
+        val descripcion = etDescripcion.text.toString().trim()
+
+        if (titulo.isEmpty()) {
+            etTitulo.error = "El título es obligatorio"
+            esValido = false
+        } else {
+            etTitulo.error = null // Limpia error si ya está correcto
+        }
+
+        if (razon.isEmpty()) {
+            actvRazon.error = "Seleccione una razón"
+            esValido = false
+        } else {
+            actvRazon.error = null
+        }
+
+        if (descripcion.isEmpty()) {
+            etDescripcion.error = "La descripción es obligatoria"
+            esValido = false
+        } else {
+            etDescripcion.error = null
+        }
+
+        return esValido
+    }
+
+    // Función para limpiar formulario tras envío exitoso
+    private fun limpiarFormulario() {
+        etTitulo.text = null
+        actvRazon.text = null
+        etDescripcion.text = null
+        ivFoto.setImageDrawable(null)
+        ivFoto.visibility = View.GONE
+        photoURI = null
+        etTitulo.requestFocus()
     }
 
     // Función que muestra opciones para adjuntar foto

@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    <!-- Opción de Inicio eliminada -->
     <item
-        android:id="@+id/action_solicitudes"
-        android:title="Solicitudes"
+        android:id="@+id/menu_productos"
+        android:title="Productos"
         app:showAsAction="ifRoom" />
-
     <item
-        android:id="@+id/action_carrito"
+        android:id="@+id/menu_formulario"
+        android:title="Formulario"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_carrito"
         android:title="Carrito"
-        app:showAsAction="ifRoom" />
-
+        android:icon="@drawable/ic_shopping_cart"
+        app:showAsAction="always" />
 </menu>

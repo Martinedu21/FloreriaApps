@@ -34,6 +34,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ProductosActivity"
+            android:exported="false"
+            android:label="Productos"
+            android:theme="@style/Theme.FloreriaApp.NoActionBar" />
+        <activity
             android:name=".ui.theme.carrito.CarritoActivity"
             android:exported="false" />
         <activity

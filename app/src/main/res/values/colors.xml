@@ -9,9 +9,12 @@
     <color name="rose_300">#F48FB1</color>
     <color name="rose_900">#880E4F</color>
 
+    <!-- Color personalizado -->
+    <color name="floripondia_pink">#d8abc2</color>
+
     <!-- Compatibilidad (para temas antiguos que usan purple_500 / purple_700) -->
-    <color name="purple_500">#E91E63</color>
-    <color name="purple_700">#C2185B</color>
+    <color name="purple_500">#d8abc2</color> <!-- Reemplazado para forzar cambio -->
+    <color name="purple_700">#a67c91</color> <!-- Versión más oscura de tu color -->
 
     <!-- Texto y fondo -->
     <color name="black">#FF000000</color>

@@ -1,106 +1,48 @@
 package com.example.floreriaapp.ui.theme.recibo
-// Paquete donde se agrupa la lógica de la pantalla de "recibo" o comprobante de compra.
 
-import android.database.Cursor
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.floreriaapp.MainActivity
 import com.example.floreriaapp.R
-import com.example.floreriaapp.database.DatabaseHelper
+import com.example.floreriaapp.model.FlorEnCarrito
+import com.example.floreriaapp.ui.theme.carrito.CarritoAdapter
+import java.text.NumberFormat
+import java.util.Locale
 
-// ---------------------------------------------------------------------------
-// Activity que muestra el recibo de compra con las flores adquiridas.
-// Muestra  los productos del carrito, el total y un botón
-// para finalizar la compra (que limpia el carrito).
-// ---------------------------------------------------------------------------
 class ReciboActivity : AppCompatActivity() {
 
-    // Contenedor lineal donde se agregarán los elementos del recibo (TextViews y botón)
-    private lateinit var reciboLayout: LinearLayout
-
-    // Referencia a la base de datos local (SQLite)
-    private lateinit var db: DatabaseHelper
-
-    // -----------------------------------------------------------------------
-    // onCreate(): método principal que se ejecuta al abrir la pantalla.
-    // Aquí se configuran las vistas y se cargan los datos del carrito.
-    // -----------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recibo)
 
-        // Vincular vistas del layout
-        reciboLayout = findViewById(R.id.reciboLayout)
+        val txtTotalPagado: TextView = findViewById(R.id.txtTotalPagado)
+        val recyclerViewDetalle: RecyclerView = findViewById(R.id.recyclerViewDetalle)
+        val btnVolverInicio: Button = findViewById(R.id.btnVolverInicio)
 
-        // Inicializar la base de datos
-        db = DatabaseHelper(this)
+        // Recibir datos
+        val itemsCompra = intent.getSerializableExtra("ITEMS_COMPRA") as? ArrayList<FlorEnCarrito> ?: arrayListOf()
+        val totalCompra = intent.getIntExtra("TOTAL_COMPRA", 0)
 
-        // Mostrar los productos del carrito y el total
-        mostrarRecibo()
+        // Configurar RecyclerView (reutilizamos CarritoAdapter ya que muestra lo mismo)
+        val adapter = CarritoAdapter(itemsCompra)
+        recyclerViewDetalle.layoutManager = LinearLayoutManager(this)
+        recyclerViewDetalle.adapter = adapter
 
-        // Agregar dinámicamente el botón "Finalizar Compra"
-        agregarBotonFinalizar()
-    }
+        // Mostrar total con formato chileno
+        val formatoChile = NumberFormat.getCurrencyInstance(Locale("es", "CL"))
+        txtTotalPagado.text = formatoChile.format(totalCompra)
 
-    // -----------------------------------------------------------------------
-    // Muestra los productos comprados leyendo directamente desde SQLite.
-    // Recorre la tabla "carrito", crea un TextView por cada producto y los
-    // agrega dinámicamente al LinearLayout.
-    // -----------------------------------------------------------------------
-    private fun mostrarRecibo() {
-        val cursor: Cursor = db.obtenerCarrito() // Obtener todos los registros del carrito
-        var total = 0.0
-
-        if (cursor.moveToFirst()) {
-            do {
-                // Obtener los valores de cada columna
-                val nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
-                val precio = cursor.getDouble(cursor.getColumnIndexOrThrow("precio"))
-                total += precio // Sumar al total general
-
-                // Crear un TextView dinámicamente para mostrar la flor y su precio
-                val tv = TextView(this)
-                tv.text = "$nombre - $$precio"   // Ejemplo: "Rosa Roja - $1500"
-                tv.textSize = 16f
-                reciboLayout.addView(tv)          // Agregarlo al layout principal
-            } while (cursor.moveToNext())
+        // Botón volver
+        btnVolverInicio.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
         }
-
-        // Cerrar el cursor para liberar recursos
-        cursor.close()
-
-        // Crear y mostrar el total al final del recibo
-        val tvTotal = TextView(this)
-        tvTotal.text = "Total: $$total"
-        tvTotal.textSize = 18f
-        tvTotal.setPadding(0, 20, 0, 0)  // Añade espacio antes del total
-        reciboLayout.addView(tvTotal)
-    }
-
-    // -----------------------------------------------------------------------
-    // Agrega un botón "Finalizar Compra" al final del recibo.
-    // Al presionarlo:
-    //   1. Vacía la tabla del carrito.
-    //   2. Muestra un mensaje de confirmación.
-    //   3. Cierra la actividad, regresando a la pantalla anterior.
-    // -----------------------------------------------------------------------
-    private fun agregarBotonFinalizar() {
-        val btnFinalizar = Button(this)
-        btnFinalizar.text = "Finalizar Compra"
-
-        btnFinalizar.setOnClickListener {
-            db.vaciarCarrito() // Limpia la base de datos del carrito
-            Toast.makeText(this, "Compra finalizada y carrito vaciado", Toast.LENGTH_SHORT).show()
-            finish() // Cierra esta actividad y regresa (por ejemplo, al carrito o al inicio)
-        }
-
-        // Agregar el botón al layout debajo de los productos y el total
-        reciboLayout.addView(btnFinalizar)
     }
 }
-
-
-

@@ -4,17 +4,17 @@
     <!-- 🌸 Tema principal de la app -->
     <style name="Theme.FloreriaApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Colores principales -->
-        <item name="colorPrimary">@color/pink_500</item>
-        <item name="colorPrimaryVariant">@color/pink_700</item>
+        <item name="colorPrimary">@color/floripondia_pink</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
 
         <!-- Colores secundarios -->
-        <item name="colorSecondary">@color/rose_300</item>
-        <item name="colorSecondaryVariant">@color/pink_700</item>
+        <item name="colorSecondary">@color/floripondia_pink</item>
+        <item name="colorSecondaryVariant">@color/purple_700</item>
         <item name="colorOnSecondary">@color/white</item>
 
         <!-- Barra de estado -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/pink_700</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/purple_700</item>
 
         <!-- Fondo y texto -->
         <item name="android:colorBackground">@color/white</item>
