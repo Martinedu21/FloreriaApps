@@ -33,7 +33,8 @@ class ReciboActivity : AppCompatActivity() {
         recyclerViewDetalle.layoutManager = LinearLayoutManager(this)
         recyclerViewDetalle.adapter = adapter
 
-        // Mostrar total con formato chileno
+        // [FORMATO MONEDA CLP EN RECIBO]
+        // Muestra el total final pagado formateado como pesos chilenos (ej: $15.000).
         val formatoChile = NumberFormat.getCurrencyInstance(Locale("es", "CL"))
         txtTotalPagado.text = formatoChile.format(totalCompra)
 

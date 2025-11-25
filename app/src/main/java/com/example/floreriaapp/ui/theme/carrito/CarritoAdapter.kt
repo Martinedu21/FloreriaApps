@@ -31,20 +31,18 @@ class CarritoAdapter(initialCarrito: List<FlorEnCarrito>) :
 
     override fun onBindViewHolder(holder: CarritoViewHolder, position: Int) {
         val flor = carrito[position]
-        
-        // Usar el nuevo método para obtener la imagen por nombre
-        val imageResId = flor.getImagenResId(holder.itemView.context)
-        if (imageResId != 0) {
-            holder.imgFlor.setImageResource(imageResId)
-        } else {
-             holder.imgFlor.setImageResource(R.drawable.ic_launcher_foreground)
-        }
-        
+        holder.imgFlor.setImageResource(flor.imagenResId)
         holder.txtNombre.text = flor.nombre
         
+        // [FORMATO MONEDA CLP]
+        // Instanciamos el formateador para Chile ("es", "CL")
+        // Esto asegura que el precio unitario se vea como "$20.000"
         val formatoChile = NumberFormat.getCurrencyInstance(Locale("es", "CL"))
         holder.txtPrecio.text = formatoChile.format(flor.precio)
         
+        // [VISUALIZACIÓN DEL CONTADOR]
+        // Aquí mostramos cuántas flores de este tipo se han agregado.
+        // El valor 'flor.cantidad' viene de la columna 'cantidad' de la base de datos interna.
         holder.txtCantidad.text = "Cantidad: ${flor.cantidad}"
     }
 
@@ -56,6 +54,8 @@ class CarritoAdapter(initialCarrito: List<FlorEnCarrito>) :
         notifyDataSetChanged()
     }
 
+    // [CÁLCULO DEL TOTAL]
+    // Multiplicamos precio * cantidad para obtener el valor real considerando el contador.
     fun getTotal(): Int {
         return carrito.sumOf { it.precio * it.cantidad }
     }
