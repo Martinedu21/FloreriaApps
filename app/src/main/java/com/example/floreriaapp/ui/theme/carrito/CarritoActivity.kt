@@ -57,7 +57,11 @@ class CarritoActivity : AppCompatActivity() {
             adapter.setFlores(items)
         }
 
+        // [OBSERVADOR DEL TOTAL]
+        // Se ejecuta cada vez que el total cambia en el ViewModel.
         viewModel.total.observe(this) { total ->
+            // [FORMATO MONEDA CLP]
+            // Convertimos el total numérico (ej: 45000) a formato texto chileno ("$45.000").
             val formatoChile = NumberFormat.getCurrencyInstance(Locale("es", "CL"))
             txtTotal.text = "Total: ${formatoChile.format(total)}"
         }
