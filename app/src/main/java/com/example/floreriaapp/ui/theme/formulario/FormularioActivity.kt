@@ -19,7 +19,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.example.floreriaapp.MainActivity
-import com.example.floreriaapp.ProductosActivity
+import com.example.floreriaapp.model.ProductosActivity
 import com.example.floreriaapp.R
 import com.example.floreriaapp.ui.theme.carrito.CarritoActivity
 import com.google.android.material.textfield.TextInputEditText

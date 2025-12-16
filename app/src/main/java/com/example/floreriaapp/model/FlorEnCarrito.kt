@@ -11,6 +11,9 @@ data class FlorEnCarrito(
     var cantidad: Int = 1
 ) : Serializable {
     
+    // Propiedad auxiliar para controlar el contador de eliminación en la vista
+    var cantidadAEliminar: Int = 1
+
     val imagenResId: Int
         get() = 0
 

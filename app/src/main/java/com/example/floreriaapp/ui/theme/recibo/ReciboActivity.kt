@@ -29,7 +29,7 @@ class ReciboActivity : AppCompatActivity() {
         val totalCompra = intent.getIntExtra("TOTAL_COMPRA", 0)
 
         // Configurar RecyclerView (reutilizamos CarritoAdapter ya que muestra lo mismo)
-        val adapter = CarritoAdapter(itemsCompra)
+        val adapter = CarritoAdapter(itemsCompra) { _, _ -> }
         recyclerViewDetalle.layoutManager = LinearLayoutManager(this)
         recyclerViewDetalle.adapter = adapter
 

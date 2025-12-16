@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 class DatabaseHelper(context: Context) :
-    SQLiteOpenHelper(context, "floreria.db", null, 3) { // Incrementamos versión a 3 para migrar a String en imagen
+    SQLiteOpenHelper(context, "floreria.db", null, 3) {
 
     companion object {
         const val TABLE_FLORES = "flores"
@@ -15,7 +15,7 @@ class DatabaseHelper(context: Context) :
         const val COLUMN_NOMBRE = "nombre"
         const val COLUMN_DESCRIPCION = "descripcion"
         const val COLUMN_PRECIO = "precio"
-        const val COLUMN_IMAGEN = "imagen" // Ahora guardará el nombre del recurso (String)
+        const val COLUMN_IMAGEN = "imagen"
 
         const val TABLE_CARRITO = "carrito"
         const val COLUMN_CANTIDAD = "cantidad"
@@ -31,7 +31,6 @@ class DatabaseHelper(context: Context) :
                 $COLUMN_IMAGEN TEXT 
             )
         """.trimIndent()
-        // COLUMN_IMAGEN cambiado a TEXT
 
         val createCarrito = """
             CREATE TABLE $TABLE_CARRITO (
@@ -42,14 +41,12 @@ class DatabaseHelper(context: Context) :
                 $COLUMN_CANTIDAD INTEGER DEFAULT 1
             )
         """.trimIndent()
-        // COLUMN_IMAGEN cambiado a TEXT
 
         db?.execSQL(createFlores)
         db?.execSQL(createCarrito)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        // En una app real deberíamos migrar datos, pero para este ejercicio recreamos tablas.
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_FLORES")
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_CARRITO")
         onCreate(db)
@@ -59,7 +56,6 @@ class DatabaseHelper(context: Context) :
     // ============        OPERACIONES CON FLORES       ============
     // ============================================================
 
-    // Modificado: imagen ahora es String
     fun agregarFlor(nombre: String, descripcion: String, precio: Double, imagenNombre: String): Long {
         val db = writableDatabase
         val values = ContentValues().apply {
@@ -78,8 +74,8 @@ class DatabaseHelper(context: Context) :
 
     // ============        OPERACIONES CON CARRITO      ============
 
-    // Modificado: imagen ahora es String
-    fun agregarAlCarrito(nombre: String, precio: Double, imagenNombre: String): Long {
+    // Modificado para aceptar la cantidad seleccionada
+    fun agregarAlCarrito(nombre: String, precio: Double, imagenNombre: String, cantidad: Int = 1): Long {
         val db = writableDatabase
 
         // Verificar si el producto ya existe en el carrito
@@ -92,10 +88,10 @@ class DatabaseHelper(context: Context) :
         )
 
         if (cursor.moveToFirst()) {
-            // Si existe, actualizamos la cantidad
+            // Si existe, actualizamos la cantidad sumando la nueva
             val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID))
             val cantidadActual = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CANTIDAD))
-            val nuevaCantidad = cantidadActual + 1
+            val nuevaCantidad = cantidadActual + cantidad
 
             val values = ContentValues().apply {
                 put(COLUMN_CANTIDAD, nuevaCantidad)
@@ -103,13 +99,13 @@ class DatabaseHelper(context: Context) :
             cursor.close()
             return db.update(TABLE_CARRITO, values, "$COLUMN_ID = ?", arrayOf(id.toString())).toLong()
         } else {
-            // Si no existe, insertamos nuevo registro
+            // Si no existe, insertamos nuevo registro con la cantidad seleccionada
             cursor.close()
             val values = ContentValues().apply {
                 put(COLUMN_NOMBRE, nombre)
                 put(COLUMN_PRECIO, precio)
-                put(COLUMN_IMAGEN, imagenNombre) // Guardamos el nombre de la imagen
-                put(COLUMN_CANTIDAD, 1)
+                put(COLUMN_IMAGEN, imagenNombre)
+                put(COLUMN_CANTIDAD, cantidad)
             }
             return db.insert(TABLE_CARRITO, null, values)
         }
@@ -118,6 +114,39 @@ class DatabaseHelper(context: Context) :
     fun obtenerCarrito(): Cursor {
         val db = readableDatabase
         return db.rawQuery("SELECT * FROM $TABLE_CARRITO", null)
+    }
+    
+    // Función para restar cantidad o eliminar si llega a 0
+    fun eliminarCantidadDelCarrito(id: Int, cantidadAEliminar: Int) {
+        val db = writableDatabase
+        
+        // Obtenemos la cantidad actual
+        val cursor = db.query(
+            TABLE_CARRITO,
+            arrayOf(COLUMN_CANTIDAD),
+            "$COLUMN_ID = ?",
+            arrayOf(id.toString()),
+            null, null, null
+        )
+        
+        if (cursor.moveToFirst()) {
+            val cantidadActual = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CANTIDAD))
+            cursor.close()
+            
+            if (cantidadAEliminar >= cantidadActual) {
+                // Si eliminamos, borramos el registro
+                db.delete(TABLE_CARRITO, "$COLUMN_ID=?", arrayOf(id.toString()))
+            } else {
+                // Si no, solo restamos la cantidad
+                val nuevaCantidad = cantidadActual - cantidadAEliminar
+                val values = ContentValues().apply {
+                    put(COLUMN_CANTIDAD, nuevaCantidad)
+                }
+                db.update(TABLE_CARRITO, values, "$COLUMN_ID = ?", arrayOf(id.toString()))
+            }
+        } else {
+            cursor.close()
+        }
     }
 
     fun eliminarDelCarrito(id: Int): Int {

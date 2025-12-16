@@ -1,4 +1,4 @@
-package com.example.floreriaapp
+package com.example.floreriaapp.model
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,9 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.floreriaapp.Flor
+import com.example.floreriaapp.MainActivity
+import com.example.floreriaapp.R
 import com.example.floreriaapp.database.DatabaseHelper
 import com.example.floreriaapp.database.RetrofitClient
-import com.example.floreriaapp.Flor
 import com.example.floreriaapp.ui.theme.carrito.CarritoActivity
 import com.example.floreriaapp.ui.theme.flor.FlorAdapter
 import com.example.floreriaapp.ui.theme.formulario.FormularioActivity
@@ -35,7 +37,7 @@ class ProductosActivity : AppCompatActivity() {
 
         recyclerViewFlores = findViewById(R.id.recyclerViewFlores)
         recyclerViewFlores.layoutManager = LinearLayoutManager(this)
-        
+
         db = DatabaseHelper(this)
 
         // Cargar datos desde la API
@@ -65,8 +67,18 @@ class ProductosActivity : AppCompatActivity() {
 
     private fun setupAdapter(flores: List<Flor>) {
         val adapter = FlorAdapter(flores) { flor ->
-            db.agregarAlCarrito(flor.nombre, flor.precio.toDouble(), flor.imagenNombre)
-            Toast.makeText(this, "${flor.nombre} agregado al carrito", Toast.LENGTH_SHORT).show()
+            // Pasamos la cantidad seleccionada a la base de datos
+            db.agregarAlCarrito(
+                flor.nombre,
+                flor.precio.toDouble(),
+                flor.imagenNombre,
+                flor.cantidadSeleccionada
+            )
+            Toast.makeText(
+                this,
+                "${flor.cantidadSeleccionada} x ${flor.nombre} agregado al carrito",
+                Toast.LENGTH_SHORT
+            ).show()
         }
         recyclerViewFlores.adapter = adapter
     }

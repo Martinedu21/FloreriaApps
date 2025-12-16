@@ -23,6 +23,11 @@ class FlorAdapter(
         val txtDescripcionFlor: TextView = itemView.findViewById(R.id.txtDescripcionFlor)
         val txtPrecioFlor: TextView = itemView.findViewById(R.id.txtPrecioFlor)
         val btnAgregarCarrito: Button = itemView.findViewById(R.id.btnAgregarCarrito)
+        
+        // Nuevos elementos para el contador
+        val btnMas: Button = itemView.findViewById(R.id.btnMas)
+        val btnMenos: Button = itemView.findViewById(R.id.btnMenos)
+        val txtCantidad: TextView = itemView.findViewById(R.id.txtCantidad)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlorViewHolder {
@@ -49,6 +54,21 @@ class FlorAdapter(
         // Formato de moneda chilena
         val formatoChile = NumberFormat.getCurrencyInstance(Locale("es", "CL"))
         holder.txtPrecioFlor.text = formatoChile.format(flor.precio)
+
+        // Lógica del contador
+        holder.txtCantidad.text = flor.cantidadSeleccionada.toString()
+
+        holder.btnMas.setOnClickListener {
+            flor.cantidadSeleccionada++
+            holder.txtCantidad.text = flor.cantidadSeleccionada.toString()
+        }
+
+        holder.btnMenos.setOnClickListener {
+            if (flor.cantidadSeleccionada > 1) {
+                flor.cantidadSeleccionada--
+                holder.txtCantidad.text = flor.cantidadSeleccionada.toString()
+            }
+        }
 
         holder.btnAgregarCarrito.setOnClickListener {
             onAgregarClick(flor)

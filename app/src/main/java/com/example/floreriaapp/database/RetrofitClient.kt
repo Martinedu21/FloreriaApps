@@ -4,8 +4,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    // URL Base proporcionada
-    private const val BASE_URL = "https://x8ki-letl-twmt.n7.xano.io/api:9hVHF-B8/"
+    // Nueva URL Base actualizada
+    private const val BASE_URL = "https://x8ki-letl-twmt.n7.xano.io/api:WfvsdcVP/"
 
     val instance: FlorApiService by lazy {
         val retrofit = Retrofit.Builder()

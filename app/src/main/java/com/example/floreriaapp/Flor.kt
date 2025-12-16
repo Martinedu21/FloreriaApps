@@ -3,6 +3,7 @@ package com.example.floreriaapp
 import android.content.Context
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 // Data class para representar una flor
@@ -26,6 +27,10 @@ data class Flor(
     val imagenNombre: String
 ) : Parcelable {
     
+    // Propiedad para gestionar la cantidad en la vista de productos (no viene de la API)
+    @IgnoredOnParcel
+    var cantidadSeleccionada: Int = 1
+
     val imagenResId: Int
         get() = 0 
 

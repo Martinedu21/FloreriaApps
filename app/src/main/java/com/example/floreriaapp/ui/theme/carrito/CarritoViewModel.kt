@@ -25,6 +25,11 @@ class CarritoViewModel(private val repository: CarritoRepository) : ViewModel() 
         repository.vaciarCarrito()
         cargarCarrito() // Actualiza la lista (ahora vacía)
     }
+    
+    fun eliminarCantidad(id: Int, cantidad: Int) {
+        repository.eliminarCantidad(id, cantidad)
+        cargarCarrito() // Actualiza la lista y el total
+    }
 
     private fun calcularTotal(items: List<FlorEnCarrito>) {
         val suma = items.sumOf { it.precio * it.cantidad }

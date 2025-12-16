@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.floreriaapp.MainActivity
-import com.example.floreriaapp.ProductosActivity
+import com.example.floreriaapp.model.ProductosActivity
 import com.example.floreriaapp.R
 import com.example.floreriaapp.database.DatabaseHelper
 import com.example.floreriaapp.repository.CarritoRepository
@@ -44,7 +44,12 @@ class CarritoActivity : AppCompatActivity() {
         val factory = CarritoViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[CarritoViewModel::class.java]
 
-        adapter = CarritoAdapter(emptyList())
+        // Inicializamos el adaptador con el callback de eliminación
+        adapter = CarritoAdapter(emptyList()) { id, cantidad ->
+            viewModel.eliminarCantidad(id, cantidad)
+            Toast.makeText(this, "Producto actualizado", Toast.LENGTH_SHORT).show()
+        }
+        
         recyclerViewCarrito.adapter = adapter
         recyclerViewCarrito.layoutManager = LinearLayoutManager(this)
 

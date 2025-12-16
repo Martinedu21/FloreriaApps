@@ -27,6 +27,10 @@ class CarritoRepository(private val dbHelper: DatabaseHelper) {
         cursor.close()
         return lista
     }
+    
+    fun eliminarCantidad(id: Int, cantidad: Int) {
+        dbHelper.eliminarCantidadDelCarrito(id, cantidad)
+    }
 
     fun vaciarCarrito() {
         dbHelper.vaciarCarrito()

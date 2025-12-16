@@ -1,43 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical">
-
-    <ImageView
-        android:id="@+id/imgFlorCarrito"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:scaleType="centerCrop"
-        android:contentDescription="Imagen de la flor en el carrito"
-        android:layout_marginEnd="16dp"/>
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="0dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/txtNombreFlorCarrito"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/imgFlorCarrito"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Imagen de la flor en el carrito"
+            android:layout_marginEnd="16dp"/>
 
-        <TextView
-            android:id="@+id/txtPrecioFlorCarrito"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/txtNombreFlorCarrito"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/txtPrecioFlorCarrito"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
             
-        <TextView
-            android:id="@+id/txtCantidadFlorCarrito"
-            android:textSize="14sp"
-            android:textColor="#757575"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/txtCantidadFlorCarrito"
+                android:textSize="14sp"
+                android:textStyle="italic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
     </LinearLayout>
+
+    <!-- Sección de eliminar cantidad -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end|center_vertical"
+        android:layout_marginTop="8dp">
+
+        <!-- Contador para eliminar -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="16dp">
+
+            <Button
+                android:id="@+id/btnMenosCarrito"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="-"
+                android:padding="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+            <TextView
+                android:id="@+id/txtCantidadEliminar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginHorizontal="12dp"
+                android:gravity="center"/>
+
+            <Button
+                android:id="@+id/btnMasCarrito"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="+"
+                android:padding="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnEliminarItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eliminar"
+            android:backgroundTint="#D32F2F"
+            style="@style/Widget.MaterialComponents.Button"/>
+    </LinearLayout>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0"
+        android:layout_marginTop="8dp"/>
+
 </LinearLayout>

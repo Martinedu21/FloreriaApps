@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.example.floreriaapp.model.ProductosActivity
 import com.example.floreriaapp.ui.theme.carrito.CarritoActivity
 import com.example.floreriaapp.ui.theme.formulario.FormularioActivity
 
