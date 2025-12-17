@@ -7,24 +7,25 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.floreriaapp.Flor
 import com.example.floreriaapp.MainActivity
 import com.example.floreriaapp.R
 import com.example.floreriaapp.database.DatabaseHelper
-import com.example.floreriaapp.database.RetrofitClient
+import com.example.floreriaapp.repository.CarritoRepository
+import com.example.floreriaapp.repository.ProductosRepository
 import com.example.floreriaapp.ui.theme.carrito.CarritoActivity
 import com.example.floreriaapp.ui.theme.flor.FlorAdapter
 import com.example.floreriaapp.ui.theme.formulario.FormularioActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.floreriaapp.viewmodel.ProductosViewModel
+import com.example.floreriaapp.viewmodel.ProductosViewModelFactory
 
 class ProductosActivity : AppCompatActivity() {
 
     private lateinit var recyclerViewFlores: RecyclerView
-    private lateinit var db: DatabaseHelper
+    private lateinit var viewModel: ProductosViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,47 +39,34 @@ class ProductosActivity : AppCompatActivity() {
         recyclerViewFlores = findViewById(R.id.recyclerViewFlores)
         recyclerViewFlores.layoutManager = LinearLayoutManager(this)
 
-        db = DatabaseHelper(this)
+        // Configuración de MVVM
+        val dbHelper = DatabaseHelper(this)
+        val carritoRepository = CarritoRepository(dbHelper)
+        val productosRepository = ProductosRepository()
+        val factory = ProductosViewModelFactory(productosRepository, carritoRepository)
+        
+        viewModel = ViewModelProvider(this, factory)[ProductosViewModel::class.java]
 
-        // Cargar datos desde la API
-        cargarDatosDesdeApi()
-    }
+        // Observar datos
+        viewModel.flores.observe(this) { flores ->
+            setupAdapter(flores)
+        }
 
-    private fun cargarDatosDesdeApi() {
-        val apiService = RetrofitClient.instance
-        val call = apiService.obtenerFlores()
+        viewModel.error.observe(this) { mensaje ->
+            Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
+        }
+        
+        viewModel.mensaje.observe(this) { mensaje ->
+            Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
+        }
 
-        call.enqueue(object : Callback<List<Flor>> {
-            override fun onResponse(call: Call<List<Flor>>, response: Response<List<Flor>>) {
-                if (response.isSuccessful) {
-                    val listaFlores = response.body() ?: emptyList()
-                    setupAdapter(listaFlores)
-                    Toast.makeText(this@ProductosActivity, "Productos cargados", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this@ProductosActivity, "Error al obtener datos", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<List<Flor>>, t: Throwable) {
-                Toast.makeText(this@ProductosActivity, "Error de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
+        // Cargar datos
+        viewModel.cargarFlores()
     }
 
     private fun setupAdapter(flores: List<Flor>) {
         val adapter = FlorAdapter(flores) { flor ->
-            // Pasamos la cantidad seleccionada a la base de datos
-            db.agregarAlCarrito(
-                flor.nombre,
-                flor.precio.toDouble(),
-                flor.imagenNombre,
-                flor.cantidadSeleccionada
-            )
-            Toast.makeText(
-                this,
-                "${flor.cantidadSeleccionada} x ${flor.nombre} agregado al carrito",
-                Toast.LENGTH_SHORT
-            ).show()
+            viewModel.agregarAlCarrito(flor)
         }
         recyclerViewFlores.adapter = adapter
     }

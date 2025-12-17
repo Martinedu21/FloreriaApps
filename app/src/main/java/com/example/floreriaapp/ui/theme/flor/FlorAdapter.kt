@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.floreriaapp.R
-import com.example.floreriaapp.model.Flor
+import com.example.floreriaapp.Flor
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -38,14 +38,12 @@ class FlorAdapter(
 
     override fun onBindViewHolder(holder: FlorViewHolder, position: Int) {
         val flor = flores[position]
-        holder.imgFlor.setImageResource(flor.imagenResId)
+        // Usamos getImagenResId pasando el contexto para obtener el recurso correcto
+        holder.imgFlor.setImageResource(flor.getImagenResId(holder.itemView.context))
         holder.txtNombreFlor.text = flor.nombre
         holder.txtDescripcionFlor.text = flor.descripcion
         
         // [FORMATO MONEDA CLP]
-        // Aquí importamos la configuración regional de Chile ("es", "CL").
-        // NumberFormat se encarga automáticamente de poner el signo '$' y los puntos de miles.
-        // Ejemplo: 15000 -> "$15.000"
         val formatoChile = NumberFormat.getCurrencyInstance(Locale("es", "CL"))
         holder.txtPrecioFlor.text = formatoChile.format(flor.precio)
 

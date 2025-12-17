@@ -15,7 +15,7 @@ class CarritoRepository(private val dbHelper: DatabaseHelper) {
                 val nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
                 val precio = cursor.getDouble(cursor.getColumnIndexOrThrow("precio"))
                 
-                // CORRECCIÓN: Leemos la imagen como String (nombre del recurso)
+                // Leemos la imagen como String (nombre del recurso)
                 val imagenNombre = cursor.getString(cursor.getColumnIndexOrThrow("imagen")) 
                 
                 val cantidad = cursor.getInt(cursor.getColumnIndexOrThrow("cantidad"))
@@ -26,6 +26,10 @@ class CarritoRepository(private val dbHelper: DatabaseHelper) {
         }
         cursor.close()
         return lista
+    }
+
+    fun agregarAlCarrito(nombre: String, precio: Double, imagenNombre: String, cantidad: Int) {
+        dbHelper.agregarAlCarrito(nombre, precio, imagenNombre, cantidad)
     }
     
     fun eliminarCantidad(id: Int, cantidad: Int) {
