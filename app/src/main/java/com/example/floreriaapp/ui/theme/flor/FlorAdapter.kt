@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.floreriaapp.R
 import com.example.floreriaapp.Flor
@@ -38,16 +39,13 @@ class FlorAdapter(
 
     override fun onBindViewHolder(holder: FlorViewHolder, position: Int) {
         val flor = flores[position]
-        // Usamos getImagenResId pasando el contexto para obtener el recurso correcto
         holder.imgFlor.setImageResource(flor.getImagenResId(holder.itemView.context))
         holder.txtNombreFlor.text = flor.nombre
         holder.txtDescripcionFlor.text = flor.descripcion
         
-        // [FORMATO MONEDA CLP]
         val formatoChile = NumberFormat.getCurrencyInstance(Locale("es", "CL"))
         holder.txtPrecioFlor.text = formatoChile.format(flor.precio)
 
-        // Lógica del contador
         holder.txtCantidad.text = flor.cantidadSeleccionada.toString()
 
         holder.btnMas.setOnClickListener {
@@ -56,14 +54,19 @@ class FlorAdapter(
         }
 
         holder.btnMenos.setOnClickListener {
-            if (flor.cantidadSeleccionada > 1) {
+            // Permitimos bajar hasta 0 si el usuario lo desea, pero no menos
+            if (flor.cantidadSeleccionada > 0) {
                 flor.cantidadSeleccionada--
                 holder.txtCantidad.text = flor.cantidadSeleccionada.toString()
             }
         }
 
         holder.btnAgregarCarrito.setOnClickListener {
-            onAgregarClick(flor)
+            if (flor.cantidadSeleccionada > 0) {
+                onAgregarClick(flor)
+            } else {
+                Toast.makeText(holder.itemView.context, "La cantidad debe ser mayor a 0", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
